@@ -27,8 +27,10 @@ const initializeServerAndDB= async() => {
 initializeServerAndDB() 
 
 // GET BOOKS 
-app.post('/books/', (request,response) => {
-    const {name,age}= request.body
-    console.log(name)
-    response.send({'name': name})
+app.get('/books/', async(request,response) => {
+    const query= `
+        SELECT * FROM Users;
+    `
+    const dbResponse= await db.all(query)
+    response.send(dbResponse)
 })
