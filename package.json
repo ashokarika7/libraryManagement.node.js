@@ -1,0 +1,25 @@
+{
+  "name": "librarymanagement",
+  "version": "1.0.0",
+  "description": "A simple Library Management System built with Node.js and Express.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "library",
+    "management",
+    "nodejs",
+    "express",
+    "database",
+    "system"
+  ],
+  "author": "Ashok",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "nodemon": "^3.1.7",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  }
+}
