@@ -19,14 +19,14 @@ GET http://localhost:3000/librarian/borrow-requests/
 
 // Approve a borrow request.
 ###
-PUT http://localhost:3000/librarian/borrow-requests/1/approve/
+PUT http://localhost:3000/librarian/borrow-requests/8/approve/
 Content-Type: application/json
 
 {
-    "userId" : 1,
+    "userId" : 8,
     "bookId": 2,
-    "startDate": "2024-11-02",
-    "endDate": "2024-11-08",
+    "startDate": "2024-12-02",
+    "endDate": "2024-12-08",
     "status": "Approved"
 }
 
@@ -70,10 +70,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByYXZlZ
 
 
 {
-    "userId" : 1,
+    "userId" : 8,
     "bookId": 2,
-    "startDate": "2024-11-02",
-    "endDate": "2024-11-08"
+    "startDate": "2024-12-02",
+    "endDate": "2024-12-08"
 }
 
 
@@ -82,3 +82,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByYXZlZ
 GET http://localhost:3000/users/2/books/history/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByYXZlZW5AZ21haWwuY29tIiwiaWF0IjoxNzMzNzI4MjAyfQ._H6TrKO-bkwNx1uFdZZWilSzWtXI2A3LypZdIkeM33Q 
 
+###
+//Download the data
+GET http://localhost:3000/users/history/csv/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByYXZlZW5AZ21haWwuY29tIiwiaWF0IjoxNzMzNzI4MjAyfQ._H6TrKO-bkwNx1uFdZZWilSzWtXI2A3LypZdIkeM33Q 

@@ -3,7 +3,7 @@ const app= express()
 const path= require('path')
 const sqlite= require('sqlite')
 const bcrypt= require('bcrypt')
-
+const { parse } = require('json2csv');
 const sqlite3= require('sqlite3').verbose()
 const jwt = require('jsonwebtoken'); 
 app.use(express.json())
@@ -318,5 +318,44 @@ app.get('/users/:bookid/books/history/', authenticateToken, async(request,respon
     const rows= history.map(eachItem => updatedList(eachItem))
     const res= {bookid: bookid, BrowserHistory:rows}
     response.send(res)  
+
+})
+
+//DOWNLOAD CSV API 
+app.get('/users/history/csv/', authenticateToken, async(request,response) => {
+    if (request.email === undefined){
+        response.status(400)
+        return response.send('Invalid User')
+    }
+
+    const getUserQuery= `SELECT * FROM Users WHERE email='${request.email}'`;
+    const user = await db.get(getUserQuery);
+    if (!user){
+        response.status(400)
+        return response.send('Invalid User')
+    }
+
+    const userId= user.id;
+    const historyQuery= `
+        SELECT * FROM BorrowHistory WHERE user_id=${userId};
+    `;
+
+    const responseHistory= await db.all(historyQuery);
+    if (!responseHistory || responseHistory.length === 0){
+        response.status(400)
+        return response.send("No History Found")
+    }
+
+    try{
+        const csv= parse(responseHistory);
+    response.header('Content-Type', 'text/csv');
+    response.header('Content-Disposition', 'attachment; filename="borrow_history.csv"');
+    response.send(csv);
+    }
+    catch(e){
+        console.log(`Error Message: ${e.message}`)
+    }
+    
+
 
 })
