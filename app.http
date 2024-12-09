@@ -23,6 +23,10 @@ PUT http://localhost:3000/librarian/borrow-requests/1/approve/
 Content-Type: application/json
 
 {
+    "userId" : 1,
+    "bookId": 2,
+    "startDate": "2024-11-02",
+    "endDate": "2024-11-08",
     "status": "Approved"
 }
 
@@ -35,6 +39,7 @@ Content-Type: application/json
     "status": "Denied"
 }
 
+//View a user's borrow history.
 ###
 GET http://localhost:3000/librarian/1/history/
 

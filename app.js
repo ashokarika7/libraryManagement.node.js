@@ -117,7 +117,7 @@ app.get('/librarian/borrow-requests/', async(request,response) => {
 //APPROVE BORROW REQUEST API 
 app.put("/librarian/borrow-requests/:requestid/approve/", async(request,response)=> {
     const {requestid}= request.params
-    const {status}= request.body
+    const {status,bookId,userId,startDate,endDate}= request.body
 
     const updateStausQuery= `
         UPDATE BorrowRequests SET 
@@ -125,6 +125,14 @@ app.put("/librarian/borrow-requests/:requestid/approve/", async(request,response
         WHERE id = ${requestid};
     `;
 
+    const borrowHistoryQuery= `
+    INSERT INTO BorrowHistory
+    (book_id, user_id, borrowed_on, returned_on)
+    VALUES
+        (${bookId}, ${userId}, '${startDate}', '${endDate}');
+`;
+
+    await db.run(borrowHistoryQuery);
     await db.run(updateStausQuery)
     response.send("Status Successfully Updated")
 
@@ -224,6 +232,7 @@ app.post('/users/borrow-requests/',authenticateToken , async(request,response) =
     const {userId,bookId,startDate,endDate}= request.body 
 
     
+    
     if (request.email === undefined){
         response.status(400)
         return response.send('Invalid User')
@@ -243,14 +252,17 @@ app.post('/users/borrow-requests/',authenticateToken , async(request,response) =
         return response.send('Invalid BookId')
     }
 
-    const borrowHistoryQuery= `
-        INSERT INTO BorrowHistory
-        (book_id, user_id, borrowed_on, returned_on)
-        VALUES
-            (${bookId}, ${userId}, '${startDate}', '${endDate}');
+    const checkBookIsBorrowed= `
+        SELECT * FROM BorrowRequests  
+        WHERE book_id=${bookId} AND ((start_date BETWEEN ${startDate} AND ${endDate}) OR (end_date BETWEEN ${startDate} AND ${endDate}));
     `;
 
-    
+    const checkBookAvailability= await db.get(checkBookIsBorrowed);
+    if (checkBookAvailability){
+        response.status(400);
+        return response.send("Book borrowed during the reqest period")
+    }
+
 
     const borrowRequestQuery= `
         INSERT INTO BorrowRequests
@@ -259,7 +271,6 @@ app.post('/users/borrow-requests/',authenticateToken , async(request,response) =
             (${bookId}, ${userId}, '${startDate}', '${endDate}');
     `
 
-    await db.run(borrowHistoryQuery)
     
     const dbBorrowResponse= await db.run(borrowRequestQuery)
     const borrowRequestId= dbBorrowResponse.lastID
@@ -267,7 +278,8 @@ app.post('/users/borrow-requests/',authenticateToken , async(request,response) =
 
 } )  
 
-// USERS BROWSER HISTORY
+
+// USERS BORROW BOOK HISTORY
 app.get('/users/:bookid/books/history/', authenticateToken, async(request,response) => {
     
     const {bookid}= request.params 
@@ -275,6 +287,8 @@ app.get('/users/:bookid/books/history/', authenticateToken, async(request,respon
         response.status(400)
         return response.send('Invalid User')
     } 
+
+    
 
     const bookCheck= `SELECT * FROM Books WHERE book_id=${bookid}`
     const book= await db.get(bookCheck);
