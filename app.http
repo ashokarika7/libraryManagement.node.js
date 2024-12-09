@@ -1,8 +1,79 @@
+
+//LIBRARIAN APIs
+
+//Create a new library user (email and password).
 ###
-POST http://localhost:3000/books/
+POST http://localhost:3000/librarian/users/
+Content-Type: application/json 
+
+{
+    "email": "praveen@gmail.com",
+    "password": "praveen",
+    "role": "User",
+    "name": "praveen"
+}
+
+//View all book borrow requests.
+###
+GET http://localhost:3000/librarian/borrow-requests/
+
+// Approve a borrow request.
+###
+PUT http://localhost:3000/librarian/borrow-requests/1/approve/
 Content-Type: application/json
 
 {
-    'name': 'ashok',
-    'age': 20
+    "status": "Approved"
 }
+
+//Deny a borrow request.
+###
+PUT http://localhost:3000/librarian/borrow-requests/2/deny/
+Content-Type: application/json
+
+{
+    "status": "Denied"
+}
+
+###
+GET http://localhost:3000/librarian/1/history/
+
+
+
+//USER APIs
+
+// users login
+###
+POST http://localhost:3000/users/login/
+Content-Type: application/json 
+
+{
+    "email": "praveen@gmail.com",
+    "password": "praveen"
+}
+
+// Get list of all available books.
+###
+GET http://localhost:3000/users/books/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByYXZlZW5AZ21haWwuY29tIiwiaWF0IjoxNzMzNzI4MjAyfQ._H6TrKO-bkwNx1uFdZZWilSzWtXI2A3LypZdIkeM33Q 
+
+//Submit a request to borrow a book (with start_date and end_date).
+###
+POST http://localhost:3000/users/borrow-requests/ 
+Content-Type: application/json 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByYXZlZW5AZ21haWwuY29tIiwiaWF0IjoxNzMzNzI4MjAyfQ._H6TrKO-bkwNx1uFdZZWilSzWtXI2A3LypZdIkeM33Q 
+
+
+{
+    "userId" : 1,
+    "bookId": 2,
+    "startDate": "2024-11-02",
+    "endDate": "2024-11-08"
+}
+
+
+//View the user's borrow history.
+###
+GET http://localhost:3000/users/2/books/history/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByYXZlZW5AZ21haWwuY29tIiwiaWF0IjoxNzMzNzI4MjAyfQ._H6TrKO-bkwNx1uFdZZWilSzWtXI2A3LypZdIkeM33Q 
+
