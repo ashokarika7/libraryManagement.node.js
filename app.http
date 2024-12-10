@@ -30,6 +30,8 @@ Content-Type: application/json
     "status": "Approved"
 }
 
+
+
 //Deny a borrow request.
 ###
 PUT http://localhost:3000/librarian/borrow-requests/2/deny/
@@ -72,7 +74,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByYXZlZ
 {
     "userId" : 8,
     "bookId": 2,
-    "startDate": "2024-12-02",
+    "startDate": "2024-12-02", 
     "endDate": "2024-12-08"
 }
 
