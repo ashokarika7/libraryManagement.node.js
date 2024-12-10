@@ -7,6 +7,7 @@ const { parse } = require('json2csv');
 const sqlite3= require('sqlite3').verbose()
 const jwt = require('jsonwebtoken'); 
 app.use(express.json())
+
 const {open}= require('sqlite')
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swaggerConfig');
